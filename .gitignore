@@ -1,0 +1,23 @@
+# Local task inputs, outputs and working state
+inputs/
+outputs/
+work/
+private/
+local/
+cache/
+
+# Credentials and environment files
+.env
+.env.*
+*.pem
+*.key
+
+# Generated archives, logs and runtime dependencies
+*.zip
+*.log
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.DS_Store

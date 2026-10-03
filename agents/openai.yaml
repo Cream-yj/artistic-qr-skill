@@ -1,0 +1,4 @@
+interface:
+  display_name: "艺术化二维码"
+  short_description: "生成主题小元素，按原码组装艺术海报并验证实际导出的扫码结果"
+  default_prompt: "使用 $artistic-qr，将提供的二维码设计成主题艺术海报，先确定小元素，再组装并验证最终 JPG。"
