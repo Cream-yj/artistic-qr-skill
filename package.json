@@ -1,0 +1,10 @@
+{
+  "name": "artistic-qr-skill-tools",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Local asset adaptation, exact-matrix composition and QR verification helpers",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "dependencies": { "sharp": "^0.35.4", "jsqr": "^1.4.0" },
+  "scripts": { "test": "node --test tests/*.test.cjs" }
+}

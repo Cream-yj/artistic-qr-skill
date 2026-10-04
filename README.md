@@ -10,7 +10,7 @@ A reusable agent skill for themed QR artwork: design recognizable assets, compos
 
 这是一个以 `SKILL.md` 为入口的流程型 Agent Skill，适合 Codex 或能够读取该格式的助手。它提供制作步骤、元素设计约束、few-shot、交付规则和解码验收方法；执行时由助手结合可用的图像生成工具、排版环境和二维码解码器完成作品。
 
-当前仓库提供的是可复用的制作方法，没有打包完整的一键生成程序、模型权重或平台专用二进制。使用者需要提供原码，执行环境需要具备实际生成和检测能力。
+仓库现提供素材适配、原矩阵组装和统一验码脚本，仍需要使用者提供原码矩阵、主题素材及可用环境；图像模型负责素材生成。它不是自动完成全部视觉决策的一键生成程序，也不包含模型权重或平台专用二进制。
 
 适合以下任务：
 
@@ -51,7 +51,26 @@ git clone https://github.com/Cream-yj/artistic-qr-skill.git \
 
 在能加载此 Skill 的会话中使用 `$artistic-qr`。如果当前客户端没有识别它，可以直接给助手提供安装目录中的 `SKILL.md` 路径。其他支持技能文件的工具，也可以按各自的技能目录规则放置这份仓库。
 
-本仓库的 Skill 安装不包含图像模型、Python/Node 库或系统框架的安装；这些执行能力由当前环境提供。
+本仓库的 Skill 安装不包含图像模型或依赖安装。使用本地脚本时，可在仓库目录运行 `npm install` 和 `python3 -m pip install -r requirements.txt`，也可复用当前环境已有的依赖。
+
+## 可执行工具
+
+| 脚本 | 作用 |
+| --- | --- |
+| `scripts/adapt-assets.cjs` | 按清单裁切/分片；保留高光和 RGB 比例的明度适配；独立 SVG/PNG 导出 |
+| `scripts/assemble-qr.cjs` | 精确矩阵与功能区组装；功能暗格使用选定元素；保留既有占格排版 |
+| `scripts/verify-qr.cjs` | 对实际文件统一调用解码器，保留成功、失败、未测试与运行错误 |
+
+```bash
+node scripts/adapt-assets.cjs local/assets-input.json --out local/adapted
+node scripts/assemble-qr.cjs local/poster.json
+node scripts/verify-qr.cjs local/poster.jpg \
+  --expected-file local/payload.txt --out local/validation.json \
+  --require zxing,vision
+npm test
+```
+
+清单格式、局部阴影、定位切片、功能格映射和跨平台验码选项见 [references/scripts.md](references/scripts.md)。缺少功能格素材会报错，脚本不添加临时方块。`--require` 只定义本次验收项；`all_required_passed` 不代表所有解码器或手机均能扫码。
 
 ## 使用示例
 
@@ -174,22 +193,36 @@ artistic-qr-skill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
-└── references/
-    ├── elements.md
-    ├── validation.md
-    └── few-shot.md
+├── scripts/
+│   ├── adapt-assets.cjs
+│   ├── assemble-qr.cjs
+│   ├── qr-layout.cjs
+│   ├── verify-qr.cjs
+│   ├── common.cjs
+│   └── apple-vision.m
+├── references/
+│   ├── elements.md
+│   ├── validation.md
+│   ├── scripts.md
+│   └── few-shot.md
+├── tests/
+│   ├── helpers.test.cjs
+│   └── fixtures/
+├── package.json
+└── requirements.txt
 ```
 
 - [SKILL.md](SKILL.md)：入口与两阶段流程，含光泽调整示例。
 - [elements.md](references/elements.md)：形状占位、生成提示、定位设计及 SVG 导出。
 - [validation.md](references/validation.md)：检测方式、记录结构与完成条件。
 - [few-shot.md](references/few-shot.md)：元素、海报、定位和局部修复的完整示例。
+- [scripts.md](references/scripts.md)：脚本清单、可运行参数与验收范围。
 
 few-shot 中的工具观察均为明确标注的教学假设，不作为公开作品的性能基准。新任务应使用真实执行结果。
 
 ## 分享时的数据处理
 
-本仓库只包含通用技能说明、匿名化示例和界面元数据，不包含原二维码、真实扫码链接、私人图片、会话日志、工作区路径或凭据。
+本仓库包含通用说明、匿名化示例、脚本、界面元数据和非私人测试夹具。测试矩阵只编码 `A` 和 `https://example.org`，不包含用户的原二维码、店铺链接、私人图片、会话日志、工作区路径或凭据。
 
 执行任务时将输入、输出和验码记录保留在本地工作目录。提交公共仓库前检查二维码图片的真实内容、SVG 内嵌素材、元数据和脚本常量；改文件名不能去掉二维码里的链接。
 
