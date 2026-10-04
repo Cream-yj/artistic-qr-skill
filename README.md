@@ -1,6 +1,22 @@
 # Artistic QR Skill · 艺术化二维码
 
-将普通二维码设计为具有主题、材质和物件细节的艺术海报，同时保留原码内容，并验证最终导出的扫码结果。
+**把普通二维码，做成有主题、有质感的海报。**
+
+AI 生成主题物件与背景，脚本按原码矩阵组装，再检测实际导出的 JPG。
+
+<p align="center">
+  <a href="examples/grand-opening/poster-share.jpg">
+    <img src="examples/grand-opening/poster-share.jpg" width="520" alt="开业大吉艺术二维码实跑海报：亮金元宝、金条、剪彩带和三色礼盒定位，搭配红绸缎背景">
+  </a>
+</p>
+
+<p align="center"><b>「开业大吉」实跑案例</b> · 亮金元宝与金条 · 红绸缎 · 礼盒定位</p>
+
+这张码打开的就是本公开仓库。主题素材先生成，再按同一原矩阵适配和组装；金属保留高光，功能暗格使用已选的小金币。
+
+**实际验码：**2048×3072、1024×1536、768×1152 三张 JPG 均通过默认 ZXing-C++ 和 Apple Vision，读取内容一致。jsQR 仍未通过；真实手机、应用与印刷尚未实测。
+
+[查看高清原图](examples/grand-opening/poster-hd.jpg) · [看金色适配前后对比](examples/grand-opening/gold-comparison.jpg) · [查看验码报告](examples/grand-opening/verification.json) · [案例说明](examples/grand-opening/README.md)
 
 A reusable agent skill for themed QR artwork: design recognizable assets, compose them against the original QR matrix, and validate the actual exported poster.
 
@@ -193,6 +209,14 @@ artistic-qr-skill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── examples/
+│   └── grand-opening/
+│       ├── README.md
+│       ├── poster-share.jpg
+│       ├── poster-hd.jpg
+│       ├── poster-small.jpg
+│       ├── gold-comparison.jpg
+│       └── verification.json
 ├── scripts/
 │   ├── adapt-assets.cjs
 │   ├── assemble-qr.cjs
